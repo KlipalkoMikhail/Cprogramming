@@ -1,0 +1,35 @@
+#include "headers.h"
+
+// 112 Клипалко Михаил Михайлович
+
+int test_qsort(double number[], int k)                   // функция проверки отсортированного массива на упорядоченность
+{
+    FILE * fout;                                        // файл с отсортированным массивом
+    fout = fopen("out.txt", "a");                       // открытие файла с отсортированными массивами на добавление чисел
+
+    fprintf(fout, "Sorted sequence: ");
+    fprintf(fout, "\n");
+
+    for (int i = 0; i < k*N - 1; i++)                   // цикл проверки массива на упорядоченность
+    {
+        if (number[i] > number[i + 1])                  // условие порядка возрастания чисел
+        {
+            printf("INCORRECT SORTING.\n");             // неверное упорядочивание
+            return -1;
+        }
+    }
+
+    for (int i = 0; i < k*N; ++i)                       // цикл записи чисел в fout
+    {
+        // printf("%lf\n", number[i]);
+        fprintf(fout, "%lf ", number[i]);
+    }
+
+    printf("SORTING IS CORRECT.\n");
+
+    fprintf(fout, "\n");
+
+    fclose(fout);                                       // закрытие файла
+
+    return 0;
+}

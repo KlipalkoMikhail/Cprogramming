@@ -1,0 +1,53 @@
+// Медленная сортировка + быстрая сортировка из библиотеки. Задача отсортировать массив в порядке возрастания, числа из массива лежат в промежутке [-10,10]
+
+#include "headers.h"
+
+// 112 Клипалко Михаил Михайлович
+
+int main(void)
+{
+    FILE * ftime;                                                       // файл с замером времени
+    ftime = fopen("time.txt", "w");                                     // открытие файла на зап
+    clock_t t;                                                          // переменная времени
+    for(int k = 1; k <= 32; k *= 2)                                     // цикл генерации и сортировки чисел
+    {
+        double number[k*N];                                             // создание массива из k*N чисел
+        int ind[k*N];
+        for(int i = 0; i < k*N; i++)
+        {
+            ind[i] = i;
+        }
+
+        mass_generation(number, k);                                     // заполнение массива случайными числами, запись изначального массива в файл
+
+        fprintf(ftime, "Slow sorting time of %d numbers: ", k*N);
+        printf("Slow sorting time of %d numbers: ", k*N);
+
+        t = clock();                                                    // начала отсчета
+        index_sort(number, k, ind);                                     // медленная сортировка индексами
+        t = clock() - t;                                                // конец отсчета
+
+        fprintf(ftime, "%lf seconds\n", (double)t/CLOCKS_PER_SEC);      // вывод времени в файл
+        printf("%lf seconds\n", (double)t/CLOCKS_PER_SEC);
+
+        test_sort(number, k, ind);                                      // проверка сортировки на корректность
+
+        mass_read(number, k);                                           // считывание чисел из массива
+
+        fprintf(ftime, "Quick sorting time of %d numbers: ", k*N);
+        printf("Quick sorting time of %d numbers: ", k*N);
+
+        t = clock();                                                    // начала отсчета
+        qsort(number, k*N, sizeof(double), compare);                    // библиотечная сортировка
+        t = clock() - t;                                                // конец отсчета
+
+        fprintf(ftime, "%lf seconds\n", (double)t/CLOCKS_PER_SEC);      // вывод времени в файл
+        printf("%lf seconds\n", (double)t/CLOCKS_PER_SEC);
+
+        test_qsort(number, k);                                          // проверка сортировки на корректность
+        printf("\n");
+
+    }
+
+    return 0;
+}
